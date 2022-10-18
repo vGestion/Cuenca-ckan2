@@ -1,0 +1,10 @@
+{% if tags %}
+<p class="pdae-formats-label mb-0">Etiquetas</p>
+<ul class="list-unstyled">
+  {% for tag in tags %}
+  <li class="d-inline-block py-5">
+      <span class="pdae-tag">{{ tag.display_name }}</span>
+    </li>
+  {% endfor %}
+</ul>
+{% endif %}

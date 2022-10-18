@@ -1,0 +1,213 @@
+{% ckan_extends %}
+
+{% set tags = h.get_facet_items_dict('tags', c.search_facets, limit=10) %}
+{% set organizations = h.get_facet_items_dict('organization', c.search_facets, limit=10) %}
+{% set groups = h.get_groups_with_packages() %}
+{% set featured_banner = h.get_featured_banner() %}
+
+{% set stats = h.get_site_statistics() %}
+{% set dataset_count = stats.dataset_count %}
+{% set organization_count = h.get_organization_count() %}
+
+{% block content %}
+<main id="content">
+  {{ self.flash() }}
+  <section class="bg-blue-sapphire section-lg text-white" id="home-main-banner">
+    <div class="container">
+      <div class="row d-flex align-items-end flex-wrap">
+        <div class="col-xs-8 col-xs-offset-2 col-md-5 col-md-offset-0 col-md-push-7 busquedaMain">
+          <p class="fs-32 mt-20 leading-tight centerText centerSmall">
+            Bienvenido al Portal de Datos Abiertos de Cuenca
+          </p>
+          <h1 class="fs-18 centerText centerSmall">
+            Explora, conoce y accede a datos abiertos del Gobierno Autonomo Descentralizado de Cuenca
+          </h1>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section-lg">
+    <div class="section-lg">
+      <div class="container">
+        <div class="row d-flex justify-content-center flex-wrap mt-4 mb-4">
+          <div class="container">
+            <div class="row d-flex justify-content-center flex-wrap align-items-center mt-0 bg-eagle-green">
+              <p class="fs-18 fw-bold mt-8 mb-8">
+                Consulta nuestros conjuntos de datos
+              </p>
+            </div>
+            <div class="mt-20">
+              {% snippet "snippets/pdae_theme_dataset_search.html", query=query %}
+            </div>
+            <div class="d-flex justify-content-center flex-wrap align-items-center mt-0">
+              <p class="fs-22  mt-16 mb-8">
+                Categorías
+              </p>
+            </div>
+           
+            <div class="row d-flex justify-content-center flex-wrap align-items-center mt-0">
+
+              <div class="pdae-groups-list mt-8 mb-8">
+                {% for group in groups %}
+                <a href="{{ h.url_for(group.type ~ '.read', id=group.name) }}" class="pdae-group-list-item">
+                  <div class="d-flex">
+                    <div class="col">
+                      <img src="{{ group.image_display_url }}" class="group-image" alt="{{ group.display_name }}">
+                    </div>
+                    <div class="col">
+                      <h5>{{ group.display_name }}</h5>
+                    </div>
+                  </div>
+                </a>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="section has-bg-image text-white">
+    <div class="container">
+      <div class="row text-center justify-content-center d-flex align-items-center flex-wrap">
+          <h2 class="fs-26 fw-light leading-tight">
+            Conoce más sobre nuestros portales
+          </h2>
+      </div>
+
+      <div class="row text-center justify-content-center d-flex align-items-center flex-wrap">
+        <a href="https://transparencia.cuenca.gob.ec/" class="btn btn-lg btn-blue-sapphire-i mt-20 fs-14">Transparencia Cuenca</a>
+          <a href="https://cuencaparticipa.cuenca.gob.ec/" class="btn btn-lg btn-blue-sapphire-i mt-20 fs-14">Plataforma participativa</a>
+          <a href="#" class="btn btn-lg btn-blue-sapphire-i mt-20 fs-14">¿Qué datos te gustaría que publiquemos?</a>
+      </div>
+
+    </div>
+  </div>
+
+  {% set show_featured_banner = h.show_featured_banner() %}
+  {{ h.snippet("home/snippets/pdae_theme_featured_banner.html", show_featured_banner=show_featured_banner,
+  featured_banner=featured_banner) }}
+  <!--
+  <section class="bg-cultured section-lg">
+    <div class="container">
+      <div class="text-center">
+        <h2 class="text-sinopia fw-bold fs-45">
+          Novedades
+        </h2>
+        <p class="fs-22 text-blue-sapphire">
+          Conoce los conjuntos de datos <span class="fw-bold">agregados o actualizados recientemente</span>
+        </p>
+      </div>
+      {% set latest_datasets = h.pdae_theme_get_datasets() %}
+      {% if latest_datasets %}
+        <div class="mt-32">
+          {{ h.snippet('home/snippets/pdae_theme_datasets_slider.html', datasets=latest_datasets) }}
+        </div>
+      {% endif %}
+    </div>
+  </section>
+ 
+  <div class="section has-bg-image home-topics text-white">
+    <div class="container">
+      <div class="row text-center d-flex align-items-center flex-wrap">
+        <div class="col-xs-12 col-md-6">
+          <h2 class="fs-35 fw-light leading-tight">
+            Explora los <span class="fw-bold">temas con<br/>más publicaciones</span>
+          </h2>
+          <a href="#" class="btn btn-lg btn-blue-sapphire-i mt-20 hidden-xs hidden-sm">Ver temas</a>
+        </div>
+        <div class="col-xs-12 col-md-6">
+          <ul class="list-unstyled mt-16 overflow-x-auto">
+            {% for tag in tags %}
+              <li class="pdae-explore-tag-container">
+                <a href="{% url_for 'dataset.search', tags=tag.name %}" class="pdae-explore-tag pdae-explore-tag-blue-sapphire">
+                  {{ tag.display_name | title }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+          <a href="#" class="btn btn-lg btn-blue-sapphire mt-20 hidden-md hidden-lg">Ver temas</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section has-bg-image home-entities text-white">
+    <div class="container">
+      <div class="row text-center d-flex align-items-center flex-wrap">
+        <div class="col-xs-12 col-md-6">
+          <h2 class="fs-35 fw-light leading-tight">
+            Explora las <span class="fw-bold">entidades que más<br/>conjuntos de datos publican</span>
+          </h2>
+          <a href="{{ h.url_for("organization.index") }}" class="btn btn-lg btn-sinopia-i mt-20 hidden-xs hidden-sm">Ver entidades</a>
+        </div>
+        <div class="col-xs-12 col-md-6">
+          <ul class="list-unstyled mt-16 overflow-x-auto">
+            {% for org in organizations %}
+              <li class="pdae-explore-tag-container">
+                <a href="{% url_for 'dataset.search', organization=org.name %}" class="pdae-explore-tag pdae-explore-tag-sinopia">
+                  {{ org.display_name }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+          <a href="#" class="btn btn-lg btn-sinopia-i mt-20 hidden-md hidden-lg">Ver entidades</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <section class="bg-cultured section-lg">
+    <div class="container">
+      <div class="text-center">
+        <h2 class="text-sinopia fw-bold fs-45">
+          Los más descargados
+        </h2>
+        <p class="fs-22 text-blue-sapphire">
+          Conoce los conjuntos de datos <span class="fw-bold">más populares</span> en nuestro portal
+        </p>
+      </div>
+      {% set popular_datasets = h.pdae_theme_get_datasets() %}
+      {% if popular_datasets %}
+        <div class="mt-32">
+          {{ h.snippet('home/snippets/pdae_theme_datasets_slider.html', datasets=popular_datasets) }}
+        </div>
+      {% endif %}
+      <div class="text-center mt-128">
+        <h2 class="text-sinopia fw-bold fs-45">
+          Centro de aprendizaje
+        </h2>
+        <p class="fs-22 text-blue-sapphire">
+          Accede a los <span class="fw-bold">tutoriales de uso</span> de este portal, a <span class="fw-bold">cursos de capacitación en Datos Abiertos</span> y mucho más.
+        </p>
+      </div>
+    </div>
+  </section>
+  <section id="data-access-banner" class="section has-bg-image text-white">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="text-center">
+            <h2 class="fs-35 fw-light leading-tight">
+              ¿Qué datos te gustaría acceder desde este <span class="fw-bold">Portal de Datos Abiertos</span>?
+            </h2>
+            <a href="/info/participacion-ciudadana" class="btn btn-lg btn-light mt-16">
+              Cuéntanos aquí
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+-->
+</main>
+{% endblock %}
+
+{%- block custom_styles %}
+{{ super() }}
+{% asset 'ckanext-pdae_theme/pdae_theme_swiper_css' %}
+{% endblock %}
+
+{%- block scripts %}
+{{ super() }}
+{% asset 'ckanext-pdae_theme/pdae_theme_swiper_js' %}
+{% asset 'ckanext-pdae_theme/pdae_theme_slider' %}
+{% endblock -%}

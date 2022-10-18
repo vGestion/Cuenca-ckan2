@@ -1,0 +1,38 @@
+{% ckan_extends %}
+
+{% block facet_list %}
+  {% set hide_empty = hide_empty or false %}
+  {% with items = items or h.get_facet_items_dict(name, search_facets or c.search_facets) %}
+    {% if items or not hide_empty %}
+      <div class="panel bg-blue-sapphire border-0">
+        <div id="{{ name }}-filter-heading" class="panel-heading" role="tab" style="background-color: var(--eagle-green)">
+          <h3 class="panel-title">
+            <a role="button" data-toggle="collapse" href="#{{ name }}-filter" aria-expanded="true" aria-controls="{{ name }}-filter" class="d-block text-decoration-none{% if not is_first_panel %} collapsed{% endif %}" {% if parent %}data-parent="#{{parent}}"{% endif %}>
+              {{ title }}
+            </a>
+          </h3>
+        </div>
+        <div id="{{ name }}-filter" class="panel-collapse collapse{% if is_first_panel %} in{% endif %}" role="tabpanel" aria-labelledby="{{ name }}-filter-heading">
+          <div class="panel-body bg-white border-0">
+            {% if items %}
+              {% for item in items | sort(attribute="display_name") %}
+                {% set index = loop.index %}
+                {% set href = h.remove_url_param(name, item.name, extras=extras, alternative_url=alternative_url) if item.active else h.add_url_param(new_params={name: item.name}, extras=extras, alternative_url=alternative_url) %}
+                {% set label = label_function(item) if label_function else item.display_name %}
+                {% set label_truncated = h.truncate(label, 22) if not label_function else label %}
+                <a href="{{ href }}" class="d-flex flex-row-reverse align-items-center justify-content-between text-decoration-none text-blue-sapphire {% if index == 1 %}mt-0{% else %}mt-8{% endif %}">
+                  <div class="mock-checkbox{% if item.active %} checked{% endif %}"></div>
+                  <span>{{ label }}</span>
+                </a>
+              {% endfor %}
+            {% else %}
+              <p>
+                {{ _('There are no {facet_type} that match this search').format(facet_type=title) }}
+              </p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endwith %}
+{% endblock %}

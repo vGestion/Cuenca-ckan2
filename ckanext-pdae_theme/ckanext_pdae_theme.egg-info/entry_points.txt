@@ -1,0 +1,7 @@
+
+        [ckan.plugins]
+        datalat_theme=ckanext.pdae_theme.plugin:PdaeThemePlugin
+
+        [babel.extractors]
+        ckan = ckan.lib.extract:extract_ckan
+    

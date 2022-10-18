@@ -1,0 +1,60 @@
+{% ckan_extends %}
+
+{% block package_item %}
+<a href="{{ h.url_for('%s.read' % package.type, id=package.name) }}" class="pdae-package-item">
+  <div class="row">
+    <div class="col-md-8">
+      <h2 class="text-blue-sapphire fs-22 fw-bold m-0 leading-tight">
+        {% if package.private %}
+        <i class="bi bi-lock-fill" aria-label="{{ _('Private') }}"></i>
+        {% endif %}
+        <span>{{ h.truncate(title, truncate_title) }}</span>
+        {% if package.get('state', '').startswith('draft') %}
+        <span class="badge">{{ _('Draft') }}</span>
+        {% elif package.get('state', '').startswith('deleted') %}
+        <span class="badge">{{ _('Deleted') }}</span>
+        {% endif %}
+      </h2>
+      <p class="text-jungle-green fs-14">
+        {% if notes %}
+        {{ notes|urlize }}
+        {% else %}
+        {{ _("This dataset has no description") }}
+        {% endif %}
+      </p>
+      <p class="fs-14">
+        <span class="fw-bold">Publicador:</span>
+        {{ package.author or package.organization.title }}
+      </p>
+
+      <p class="fs-14">
+        <span class="fw-bold">Categorias</span>
+        <ul class="list-unstyled">
+          {% for group in package.groups %}
+          <li class="d-inline-block">
+            <span class="pkg-tag">{{ group.display_name }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </p>
+
+      {% if package.resources and not hide_resources %}
+
+      <p class="fs-14 fw-bold">Formatos disponibles</p>
+      <ul class="dataset-resources list-unstyled">
+        {% for resource in h.dict_list_reduce(package.resources, 'format') %}
+        <li class="d-inline-block badge badge-default">
+          <span>{{ resource }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      <p class="fs-14">
+        <br><span class="fw-bold">Última actualización:</span>
+        {{ h.pdae_theme_render_datetime(package.metadata_modified) }}
+      </p>
+    </div>
+  </div>
+  
+</a>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% ckan_extends %}
+
+{% block package_basic_fields_custom %}
+  {{ form.input('dataset_lang', label="Lenguaje", id="field-dataset_lang", placeholder="ej. Español", value=data.dataset_lang, error=errors.dataset_lang, classes=["control-medium"]) }}
+  <div class="form-group control-group">
+    <label for="field-update_frequency" class="control-label">
+      Frecuencia de actualización
+    </label>
+    <div class="controls">
+      <select name="update_frequency" id="field-update_frequency" data-module="autocomplete">
+        {% set existing_uf_id = data.get("update_frequency", []) %}
+        <option value="">Por favor selecciona la frecuencia de actualización</option>
+        {% for freq in h.update_frequency() %}
+          {% set is_selected = freq in existing_uf_id %}
+          <option value="{{ freq }}" {% if is_selected %}selected="selected"{% endif %}>{{ freq }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+{% endblock %}

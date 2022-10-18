@@ -1,0 +1,78 @@
+<footer>
+<!--
+  <div class="bg-teal-blue footer-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 footer-section-col">
+          <ul class="list-unstyled">
+            <li>
+              <a href="{{ h.url_for(controller='dataset', action='search') }}">
+                Catálogo de Datos Abiertos
+              </a>
+            </li>
+            <li>
+              <a href="/blog">
+                Blog / Noticias
+              </a>
+            </li>
+            <li>
+              <a href="/centro-de-aprendizaje/preguntas-frecuentes">
+                Centro de aprendizaje
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-3 footer-section-col" style="text-align: center;">
+          <p class="fw-bold fs-18">Contáctanos</p>
+          <ul class="list-inline">
+            <li class="fs-22">
+              <a href="{{ h.get_social_media()['twitter'] }}" aria-label="Visitar Twitter" target="_blank">
+                <i class="bi bi-twitter"></i>
+              </a>
+            </li>
+            <li class="fs-22">
+              <a href="{{ h.get_social_media()['facebook'] }}" aria-label="Visitar Facebook" target="_blank">
+                <i class="bi bi-facebook"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-5 footer-section-col">
+          <ul class="list-unstyled md:text-end">
+            <li>Av. Patria y Av. 12 de Octubre Edificio Planifica Ecuador</li>
+            <li>Código Postal: 170525/ Quito - Ecuador</li>
+            <li>Teléfono: 593-2 3 97-8900</li>
+            <li class="fw-bold">
+              <a href="http://www.planificacion.gob.ec" target="_blank">www.planificacion.gob.ec</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+-->
+  <div class="footer-section">
+      <div class="d-flex justify-content-center flex-wrap align-items-center mt-0">
+        <div class="col ">
+          <img class="img-responsive footer-image2" src="/images/GIZ.png" alt="">
+        </div>
+        <div class="col footer-section-col">
+          <p class="fs-12">Implementado por:</P>
+          <img class="img-responsive footer-image" src="/images/datalat.png" alt="">
+        </div>
+        <div class="col">
+            <img class="img-responsive footer-image" src="/images/logo_cuenca_m_1.png" alt="">
+        </div>
+      </div>
+  </div>
+
+  {% if g.debug and not g.debug_supress_header %}
+    <div class="debug">Controller : {{ c.controller }}<br/>Action : {{ c.action }}</div>
+  {% endif %}
+  {% block footer_debug %}
+    {% if g.debug %}
+      {% include 'snippets/debug.html' %}
+    {% endif %}
+  {% endblock %}
+</footer>

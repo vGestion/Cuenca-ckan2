@@ -1,0 +1,18 @@
+<form action="{{ action }}" method="post" class="login-form">
+  <div class="mb-4">
+    <label for="username" class="form-label text-blue-sapphire fs-18">Nombre de usuario</label>
+    <input type="text" name="login" id="username" class="form-control" placeholder="Nombre de usuario" required>
+  </div>
+  <div class="mt-20">
+    <label for="password" class="form-label text-blue-sapphire fs-18">Contraseña</label>
+    <input type="password" name="password" id="password" class="form-control" placeholder="Contraseña" required>
+  </div>
+  <div class="mt-32 d-flex flex-column align-items-center">
+    <button type="submit" class="btn btn-lg btn-sinopia">
+      Iniciar sesión
+    </button>
+    <a href="{{ h.url_for('user.request_reset') }}" class="fs-18 text-blue-sapphire fw-bold mt-16">
+      ¿Olvidaste tu contraseña?
+    </a>
+  </div>
+</form>
